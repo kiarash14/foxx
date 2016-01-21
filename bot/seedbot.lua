@@ -224,7 +224,6 @@ function create_config( )
     sudo_users = {100096055,0,tonumber(our_id)},--Sudo users
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
-    about_text = [[not teleseed
     help_text_realm = [[
 Realm Commands:
 
