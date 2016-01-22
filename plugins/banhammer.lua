@@ -34,7 +34,7 @@ local function pre_process(msg)
             kk_user(msg.from.id, msg.to.id)-- Kick user who adds ban ppl more than 3 times
           end
           if tonumber(banaddredis) ==  8 and not is_owner(msg) then 
-            ban_user(msg.from.id, msg.to.id)-- Kick user who adds ban ppl more than 7 times
+            kb_user(msg.from.id, msg.to.id)-- Kick user who adds ban ppl more than 7 times
             local banhash = 'addedbanuser:'..msg.to.id..':'..msg.from.id
             redis:set(banhash, 0)-- Reset the Counter
           end
@@ -81,7 +81,7 @@ local function pre_process(msg)
   return msg
 end
 
-local function kk_ban_res(extra, success, result)
+local function kk_kb_res(extra, success, result)
 --vardump(result)
 --vardump(extra)
       local member_id = result.id
@@ -185,14 +185,14 @@ local function run(msg, matches)
 		}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kick_ban_res, cbres_extra)
+		res_user(username, kk_kb_res, cbres_extra)
     	end
   end
 
 
   if matches[1]:lower() == 'unkb' then -- /unkb 
     if type(msg.reply_id)~="nil" and is_momod(msg) then
-      local msgr = get_message(msg.reply_id,unban_by_reply, false)
+      local msgr = get_message(msg.reply_id,unkb_by_reply, false)
     end
       local user_id = matches[2]
       local chat_id = msg.to.id
@@ -212,14 +212,14 @@ local function run(msg, matches)
 		}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kick_ban_res, cbres_extra)
+		res_user(username, kk_kb_res, cbres_extra)
 	end
  end
 
 if matches[1]:lower() == 'kk' then
     if type(msg.reply_id)~="nil" and is_momod(msg) then
       if is_admin(msg) then
-        local msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
+        local msgr = get_message(msg.reply_id,Kk_by_reply_admins, false)
       else
         msgr = get_message(msg.reply_id,Kick_by_reply, false)
       end
@@ -239,7 +239,7 @@ if matches[1]:lower() == 'kk' then
       		local chat_id = msg.to.id
 		name = user_print_name(msg.from)
 		savelog(msg.to.id, name.." ["..msg.from.id.."] kicked user ".. matches[2])
-		kick_user(user_id, chat_id)
+		kk_user(user_id, chat_id)
 	else
 		local cbres_extra = {
 			chat_id = msg.to.id,
@@ -248,7 +248,7 @@ if matches[1]:lower() == 'kk' then
 		}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kick_ban_res, cbres_extra)
+		res_user(username, kk_kb_res, cbres_extra)
 	end
 end
 
@@ -259,7 +259,7 @@ end
 
   if matches[1]:lower() == 'bb' then -- Global ban
     if type(msg.reply_id) ~="nil" and is_admin(msg) then
-      return get_message(msg.reply_id,banall_by_reply, false)
+      return get_message(msg.reply_id,bb_by_reply, false)
     end
     local user_id = matches[2]
     local chat_id = msg.to.id
@@ -278,7 +278,7 @@ end
 	}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kick_ban_res, cbres_extra)
+		res_user(username, kk_kb_res, cbres_extra)
       	end
   end
   if matches[1]:lower() == 'unbb' then -- Global unban
@@ -298,11 +298,11 @@ end
 	}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kick_ban_res, cbres_extra)
+		res_user(username, kk_kb_res, cbres_extra)
       end
   end
   if matches[1]:lower() == "gbblist" then -- Global ban list
-    return banall_list()
+    return bb_list()
   end
 end
 
@@ -313,7 +313,7 @@ return {
     "^[!/]([Kk]blist) (.*)$",
     "^[!/]([Kk]blist)$",
     "^[!/]([Gg]blist)$",
-    "^[!/]([Kk])b (.*)$",
+    "^[!/]([Kk]b) (.*)$",
     "^[!/]([Kk]k)$",
     "^[!/]([Uu]nkb) (.*)$",
     "^[!/]([Uu]nbb) (.*)$",
