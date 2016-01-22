@@ -226,11 +226,11 @@ function create_config( )
     moderation = {data = 'data/moderation.json'},
     about_text = [[Telebumper v1
         
-http://s7.picofile.com/file/8234656126/%D8%B0.jpg
+http://s7.picofile.com/file/8234722668/Bumper
+
 Admins
 @kiarash_gh14 
 @Xx_MaMad_ahrimanam_xX
-@Mohammadsnadow
 
 
 ID Bot:
