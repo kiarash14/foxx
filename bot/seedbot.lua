@@ -237,7 +237,7 @@ ID Bot:
 @telebumper
 
 ID channel
-@bumpervhannel
+@bumperchannel
 ]],
     help_text_realm = [[
 Realm Commands:
