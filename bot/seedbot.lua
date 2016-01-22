@@ -224,7 +224,21 @@ function create_config( )
     sudo_users = {100096055,0,tonumber(our_id)},--Sudo users
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
-    about_text = [[سورس مورد نظر پیدا نشد]]
+    about_text = [[Telebumper v1
+        
+http://s7.picofile.com/file/8234656126/%D8%B0.jpg
+Admins
+@kiarash_gh14 
+@Xx_MaMad_ahrimanam_xX
+@Mohammadsnadow
+
+
+ID Bot:
+@telebumper
+
+ID channel
+@bumpervhannel
+]],
     help_text_realm = [[
 Realm Commands:
 
