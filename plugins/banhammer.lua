@@ -12,7 +12,7 @@ local function pre_process(msg)
       print('User is banned!')
       local name = user_print_name(msg.from)
       savelog(msg.to.id, name.." ["..msg.from.id.."] is banned and kicked ! ")-- Save to logs
-      kk_user(user_id, msg.to.id)
+      kick_user(user_id, msg.to.id)
       end
     end
     -- Check if banned user joins chat
@@ -81,7 +81,7 @@ local function pre_process(msg)
   return msg
 end
 
-local function kk_kb_res(extra, success, result)
+local function kick_ban_res(extra, success, result)
 --vardump(result)
 --vardump(extra)
       local member_id = result.id
@@ -99,7 +99,7 @@ local function kk_kb_res(extra, success, result)
             return send_large_msg(receiver, "You can't kick mods/owner/admins")
          end
          return kk_user(member_id, chat_id)
-      elseif get_cmd == 'kb' then
+      elseif get_cmd == 'ban' then
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
           return send_large_msg(receiver, "You can't ban mods/owner/admins")
         end
@@ -154,7 +154,7 @@ local function run(msg, matches)
     end
     return ban_list(chat_id)
   end
-  if matches[1]:lower() == 'kb' then-- /ban 
+  if matches[1]:lower() == 'kb' then-- /kb 
     if type(msg.reply_id)~="nil" and is_momod(msg) then
       if is_admin(msg) then
         local msgr = get_message(msg.reply_id,ban_by_reply_admins, false)
@@ -180,19 +180,19 @@ local function run(msg, matches)
       else
 		local cbres_extra = {
 		chat_id = msg.to.id,
-		get_cmd = 'kb',
+		get_cmd = 'ban',
 		from_id = msg.from.id
 		}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kk_kb_res, cbres_extra)
+		res_user(username, kick_ban_res, cbres_extra)
     	end
   end
 
 
   if matches[1]:lower() == 'unkb' then -- /unkb 
     if type(msg.reply_id)~="nil" and is_momod(msg) then
-      local msgr = get_message(msg.reply_id,unkb_by_reply, false)
+      local msgr = get_message(msg.reply_id,unban_by_reply, false)
     end
       local user_id = matches[2]
       local chat_id = msg.to.id
@@ -207,7 +207,7 @@ local function run(msg, matches)
       else
 		local cbres_extra = {
 			chat_id = msg.to.id,
-			get_cmd = 'unkb',
+			get_cmd = 'unban',
 			from_id = msg.from.id
 		}
 		local username = matches[2]
@@ -219,7 +219,7 @@ local function run(msg, matches)
 if matches[1]:lower() == 'kk' then
     if type(msg.reply_id)~="nil" and is_momod(msg) then
       if is_admin(msg) then
-        local msgr = get_message(msg.reply_id,Kk_by_reply_admins, false)
+        local msgr = get_message(msg.reply_id,Kick_by_reply_admins, false)
       else
         msgr = get_message(msg.reply_id,Kick_by_reply, false)
       end
@@ -248,7 +248,7 @@ if matches[1]:lower() == 'kk' then
 		}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kk_kb_res, cbres_extra)
+		res_user(username, kick_ban_res, cbres_extra)
 	end
 end
 
@@ -259,7 +259,7 @@ end
 
   if matches[1]:lower() == 'bb' then -- Global ban
     if type(msg.reply_id) ~="nil" and is_admin(msg) then
-      return get_message(msg.reply_id,bb_by_reply, false)
+      return get_message(msg.reply_id,banall_by_reply, false)
     end
     local user_id = matches[2]
     local chat_id = msg.to.id
@@ -273,12 +273,12 @@ end
       else
 	local cbres_extra = {
 		chat_id = msg.to.id,
-		get_cmd = 'bb',
+		get_cmd = 'banall',
 		from_id = msg.from.id
 	}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kk_kb_res, cbres_extra)
+		res_user(username, kick_ban_res, cbres_extra)
       	end
   end
   if matches[1]:lower() == 'unbb' then -- Global unban
@@ -288,7 +288,7 @@ end
         if tonumber(matches[2]) == tonumber(our_id) then 
           	return false 
         end
-       		unbb_user(user_id)
+       		unbanall_user(user_id)
         	return 'User ['..user_id..' ] removed from global ban list'
       else
 	local cbres_extra = {
@@ -298,21 +298,21 @@ end
 	}
 		local username = matches[2]
 		local username = string.gsub(matches[2], '@', '')
-		res_user(username, kk_kb_res, cbres_extra)
+		res_user(username, kick_ban_res, cbres_extra)
       end
   end
   if matches[1]:lower() == "gbblist" then -- Global ban list
-    return bb_list()
+    return banall_list()
   end
 end
 
 return {
   patterns = {
-    "^[!/]([Kk]b) (.*)$",
-    "^[!/]([Kk]b)$",
+    "^[!/]([Bb]b) (.*)$",
+    "^[!/]([Bb]b)$",
     "^[!/]([Kk]blist) (.*)$",
     "^[!/]([Kk]blist)$",
-    "^[!/]([Gg]blist)$",
+    "^[!/]([Gg]bblist)$",
     "^[!/]([Kk]b) (.*)$",
     "^[!/]([Kk]k)$",
     "^[!/]([Uu]nkb) (.*)$",
