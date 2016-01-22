@@ -527,7 +527,7 @@ local function set_group_photo(msg, success, result)
   end
 end
 
-local function promote(receiver, member_username, member_id)
+local function p(receiver, member_username, member_id)
   local data = load_data(_config.moderation.data)
   local group = string.gsub(receiver, 'chat#id', '')
   if not data[group] then
@@ -541,7 +541,7 @@ local function promote(receiver, member_username, member_id)
   return send_large_msg(receiver, member_username..' has been promoted.')
 end
 
-local function promote_by_reply(extra, success, result)
+local function p_by_reply(extra, success, result)
     local msg = result
     local full_name = (msg.from.first_name or '')..' '..(msg.from.last_name or '')
     if msg.from.username then
@@ -551,11 +551,11 @@ local function promote_by_reply(extra, success, result)
     end
     local member_id = msg.from.id
     if msg.to.type == 'chat' then
-      return promote(get_receiver(msg), member_username, member_id)
+      return p(get_receiver(msg), member_username, member_id)
     end  
 end
 
-local function demote(receiver, member_username, member_id)
+local function d(receiver, member_username, member_id)
   local data = load_data(_config.moderation.data)
   local group = string.gsub(receiver, 'chat#id', '')
   if not data[group] then
@@ -569,7 +569,7 @@ local function demote(receiver, member_username, member_id)
   return send_large_msg(receiver, member_username..' has been demoted.')
 end
 
-local function demote_by_reply(extra, success, result)
+local function d_by_reply(extra, success, result)
     local msg = result
     local full_name = (msg.from.first_name or '')..' '..(msg.from.last_name or '')
     if msg.from.username then
@@ -579,11 +579,11 @@ local function demote_by_reply(extra, success, result)
     end
     local member_id = msg.from.id
     if msg.to.type == 'chat' then
-      return demote(get_receiver(msg), member_username, member_id)
+      return d(get_receiver(msg), member_username, member_id)
     end  
 end
 
-local function setowner_by_reply(extra, success, result)
+local function sw_by_reply(extra, success, result)
   local msg = result
   local receiver = get_receiver(msg)
   local data = load_data(_config.moderation.data)
@@ -595,7 +595,7 @@ local function setowner_by_reply(extra, success, result)
       return send_large_msg(receiver, text)
 end
 
-local function promote_demote_res(extra, success, result)
+local function p_d_res(extra, success, result)
 --vardump(result)
 --vardump(extra)
       local member_id = result.id
@@ -610,7 +610,7 @@ local function promote_demote_res(extra, success, result)
       end
 end
 
-local function modlist(msg)
+local function ml(msg)
   local data = load_data(_config.moderation.data)
   local groups = "groups"
   if not data[tostring(groups)][tostring(msg.to.id)] then
@@ -680,7 +680,7 @@ local function user_msgs(user_id, chat_id)
   return user_info
 end
 
-local function kick_zero(cb_extra, success, result)
+local function kk_zero(cb_extra, success, result)
     local chat_id = cb_extra.chat_id
     local chat = "chat#id"..chat_id
     local ci_user
@@ -706,7 +706,7 @@ local function kick_zero(cb_extra, success, result)
     end
 end
 
-local function kick_inactive(chat_id, num, receiver)
+local function kk_inactive(chat_id, num, receiver)
     local hash = 'chat:'..chat_id..':users'
     local users = redis:smembers(hash)
     -- Get user info
@@ -800,7 +800,7 @@ local function run(msg, matches)
         local picprotectionredis = redis:get(picturehash) 
         if picprotectionredis then 
           if tonumber(picprotectionredis) == 4 and not is_owner(msg) then 
-            kick_user(msg.from.id, msg.to.id)
+            kk_user(msg.from.id, msg.to.id)
           end
           if tonumber(picprotectionredis) ==  8 and not is_owner(msg) then 
             ban_user(msg.from.id, msg.to.id)
@@ -828,7 +828,7 @@ local function run(msg, matches)
         local picprotectionredis = redis:get(picturehash) 
         if picprotectionredis then 
           if tonumber(picprotectionredis) == 4 and not is_owner(msg) then 
-            kick_user(msg.from.id, msg.to.id)
+            kk_user(msg.from.id, msg.to.id)
           end
           if tonumber(picprotectionredis) ==  8 and not is_owner(msg) then 
             ban_user(msg.from.id, msg.to.id)
@@ -858,7 +858,7 @@ local function run(msg, matches)
           local nameprotectionredis = redis:get(namehash) 
           if nameprotectionredis then 
             if tonumber(nameprotectionredis) == 4 and not is_owner(msg) then 
-              kick_user(msg.from.id, msg.to.id)
+              kk_user(msg.from.id, msg.to.id)
             end
             if tonumber(nameprotectionredis) ==  8 and not is_owner(msg) then 
               ban_user(msg.from.id, msg.to.id)
@@ -889,7 +889,7 @@ local function run(msg, matches)
       save_data(_config.moderation.data, data)
       return 'Please send me new group photo now'
     end
-    if matches[1] == 'promote' and not matches[2] then
+    if matches[1] == 'p' and not matches[2] then
       if not is_owner(msg) then
         return "Only the owner can prmote new moderators"
       end
@@ -897,7 +897,7 @@ local function run(msg, matches)
           msgr = get_message(msg.reply_id, promote_by_reply, false)
       end
     end
-    if matches[1] == 'promote' and matches[2] then
+    if matches[1] == 'p' and matches[2] then
       if not is_momod(msg) then
         return
       end
@@ -908,14 +908,14 @@ local function run(msg, matches)
         savelog(msg.to.id, name_log.." ["..msg.from.id.."] promoted @".. member)
 	local cbres_extra = {
 	chat_id = msg.to.id,
-        mod_cmd = 'promote', 
+        mod_cmd = 'p', 
 	from_id = msg.from.id
 	}
 	local username = matches[2]
 	local username = string.gsub(matches[2], '@', '')
 	return res_user(username, promote_demote_res, cbres_extra)
     end
-    if matches[1] == 'demote' and not matches[2] then
+    if matches[1] == 'd' and not matches[2] then
       if not is_owner(msg) then
         return "Only the owner can demote moderators"
       end
@@ -923,7 +923,7 @@ local function run(msg, matches)
           msgr = get_message(msg.reply_id, demote_by_reply, false)
       end
     end
-    if matches[1] == 'demote' and matches[2] then
+    if matches[1] == 'd' and matches[2] then
       if not is_momod(msg) then
         return
       end
@@ -944,7 +944,7 @@ local function run(msg, matches)
 	local username = string.gsub(matches[2], '@', '')
 	return res_user(username, promote_demote_res, cbres_extra)
     end
-    if matches[1] == 'modlist' then
+    if matches[1] == 'mol' then
       savelog(msg.to.id, name_log.." ["..msg.from.id.."] requested group modlist")
       return modlist(msg)
     end
@@ -1226,8 +1226,8 @@ return {
   "^[!/](rem) (realm)$",
   "^[!/](rules)$",
   "^[!/](about)$",
-  "^[!/](sn) (.*)$",
-  "^[!/](sp)$",
+  "^[!/](setname) (.*)$",
+  "^[!/](setphoto)$",
   "^[!/](p) (.*)$",
   "^[!/](p)",
   "^[!/](help)$",
@@ -1237,19 +1237,19 @@ return {
   "^[!/](d) (.*)$",
   "^[!/](d)",
   "^[!/](set) ([^%s]+) (.*)$",
-  "^[!/](l) (.*)$",
+  "^[!/](lock) (.*)$",
   "^[!/](sw) (%d+)$",
   "^[!/](sw)",
   "^[!/](owner)$",
   "^[!/](res) (.*)$",
   "^[!/](sp) (%d+) (%d+)$",-- (group id) (owner id)
-  "^[!/](unl) (.*)$",
-  "^[!/](sf) (%d+)$",
+  "^[!/](unlock) (.*)$",
+  "^[!/](setflood) (%d+)$",
   "^[!/](settings)$",
 -- "^[!/](public) (.*)$",
   "^[!/](ml)$",
-  "^[!/](nl)$",
-  "^[!/](l)$",
+  "^[!/](newlink)$",
+  "^[!/](link)$",
   "^[!/](kickinactive)$",
   "^[!/](kickinactive) (%d+)$",
   "%[(photo)%]",
