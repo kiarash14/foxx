@@ -117,8 +117,8 @@ local function all(target, receiver)
   text = text.."\n\nLink: \n"..link
   local stats = chat_stats(target)
   text = text.."\n\n"..stats
-  local ban_list = ban_list(target)
-  text = text.."\n\n"..ban_list
+  local kb_list = kb_list(target)
+  text = text.."\n\n"..kb_list
   local file = io.open("./groups/all/"..target.."all.txt", "w")
   file:write(text)
   file:flush()
