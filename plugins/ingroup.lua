@@ -13,10 +13,10 @@ local function check_member_autorealm(cb_extra, success, result)
         group_type = 'Realm',
         settings = {
           set_name = string.gsub(msg.to.print_name, '_', ' '),
-         🔒 lock_name = 'yes', 
-         🔓 lock_photo = 'no', 
-         🔓 lock_member = 'no',
-         🔒 flood = 'yes' 
+          lock_name = 'yes', 
+          lock_photo = 'no', 
+          lock_member = 'no',
+          flood = 'yes' 
         }
       }
       save_data(_config.moderation.data, data)
@@ -43,10 +43,10 @@ local function check_member_realm_add(cb_extra, success, result)
         group_type = 'Realm',
         settings = {
           set_name = string.gsub(msg.to.print_name, '_', ' '),
-         🔒 lock_name = 'yes',
-         🔒 lock_photo = 'no',
-         🔓 lock_member = 'no',
-         🔒 flood = 'yes'
+          lock_name = 'yes',
+          lock_photo = 'no',
+          lock_member = 'no',
+          flood = 'yes'
         }
       }
       save_data(_config.moderation.data, data)
@@ -75,10 +75,10 @@ function check_member_group(cb_extra, success, result)
         set_owner = member_id ,
         settings = {
           set_name = string.gsub(msg.to.print_name, '_', ' '),
-         🔒 lock_name = 'yes',
-         🔓 lock_photo = 'no',
-         🔓 lock_member = 'no',
-         🔓 flood = 'yes',
+          lock_name = 'yes',
+          lock_photo = 'no',
+          lock_member = 'no',
+          flood = 'yes',
         }
       }
       save_data(_config.moderation.data, data)
@@ -107,10 +107,10 @@ local function check_member_modadd(cb_extra, success, result)
         set_owner = member_id ,
         settings = {
           set_name = string.gsub(msg.to.print_name, '_', ' '),
-         🔒 lock_name = 'yes',
-         🔓 lock_photo = 'no',
-         🔓 lock_member = 'no',
-         🔒 flood = 'yes',
+          lock_name = 'yes',
+          lock_photo = 'no',
+          lock_member = 'no',
+          flood = 'yes',
         }
       }
       save_data(_config.moderation.data, data)
